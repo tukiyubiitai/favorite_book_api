@@ -39,6 +39,8 @@ class _RakutenPageState extends ConsumerState<RakutenPage> {
   @override
   Widget build(BuildContext context) {
     ref.watch(favoriteItemNotifierProvider.notifier);
+    final favoriteList = ref.watch(favoriteListNotifierProvider);
+
     final state = ref.watch(rakutenListAsyncNotifierProvider);
     return Scaffold(
       appBar: AppBar(
@@ -142,38 +144,70 @@ class _RakutenPageState extends ConsumerState<RakutenPage> {
                   Positioned.fill(
                       child: InkWell(
                         onTap: () {
-                          ref.read(favoriteListNotifierProvider.notifier).addList(
-                            FavoriteItem(
-                              title: book.title,
-                              imageUrl: book.imageUrl,
-                              id: book.id,
-                              source:
-                              "Rakuten", // 例: "Google Books", "Open Library"など
-                            ),
-                          );
                           final vm =
-                          ref.read(rakutenListAsyncNotifierProvider.notifier);
-                          if (vm.isWishlisted(book.id)) {
-                            vm.removeFromWishlist(book.id);
+                          ref.read(favoriteListNotifierProvider.notifier);
+
+                          if (vm.isFavoriteListed(book.id)) {
+                            vm.removeListById(book.id);
                           } else {
-                            vm.addToWishlist(book);
+                            vm.addList(
+                              FavoriteItem(
+                                title: book.title,
+                                imageUrl: book.imageUrl,
+                                id: book.id,
+                                source:
+                                "Rakuten", // 例: "Google Books", "Open Library"など
+                              ),
+                            );
                           }
                         },
                         child: Align(
                           child: Icon(
                             Icons.favorite,
-                            color: data.wishlist.contains(book.id)
+                            color: ref
+                                .watch(favoriteListNotifierProvider.notifier)
+                                .isFavoriteListed(book.id)
                                 ? Colors.redAccent
                                 : Colors.black38,
                             size: 50,
                           ),
                         ),
-                      ))
+                      ),),
+
                 ],
               ),
             );
           },
         ),
+      ),
+      floatingActionButton: state.value == null
+          ? null
+          : Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: FloatingActionButton(
+              onPressed: () {},
+              tooltip: "View Wishlist",
+              child: const Icon(Icons.auto_fix_high_outlined),
+            ),
+          ),
+          //wishlistが存在する時だけ表示
+          if (favoriteList.isNotEmpty == true)
+            Positioned(
+              right: -4,
+              bottom: 40,
+              child: CircleAvatar(
+                backgroundColor: Colors.tealAccent,
+                radius: 12,
+                child: Text(
+                  favoriteList.length.toString(),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

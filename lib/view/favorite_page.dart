@@ -22,11 +22,7 @@ class FavoritePage extends ConsumerWidget {
             SizedBox(
               height: 10,
             ),
-            OutlinedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("本を追加して下さい"))
+          Text("本を追加して下さい"),
           ],
         ),
       )
@@ -79,7 +75,11 @@ class FavoritePage extends ConsumerWidget {
                 ),
                 Positioned.fill(
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      final vm =
+                      ref.read(favoriteListNotifierProvider.notifier);
+                      vm.removeListById(book.id);
+                    },
                     child: Align(
                       child: Icon(
                         Icons.favorite,

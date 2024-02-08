@@ -46,10 +46,10 @@ class _BottomTabNavigatorState extends State<BottomTabNavigator> {
         backgroundColor: Colors.indigo[900],
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
+        items:  <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: 'home'),
-          BottomNavigationBarItem(icon: Icon(Icons.r_mobiledata), label: 'rakuten'),
-          BottomNavigationBarItem(icon: Icon(Icons.g_mobiledata), label: 'google'),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'rakuten'),
+          BottomNavigationBarItem(icon: Icon(Icons.book_online), label: 'google'),
 
         ],
         type: BottomNavigationBarType.fixed,
